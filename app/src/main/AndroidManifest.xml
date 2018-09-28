@@ -37,8 +37,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".DisplayActivity"></activity>
     </application>
 
 </manifest>

@@ -75,17 +75,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnLeft = (Button) findViewById(R.id.btnLeft);
         Button btnRight = (Button) findViewById(R.id.btnRight);
         Button btnFilter = (Button) findViewById(R.id.btnFilter);
-//        Button btnDisplay = (Button) findViewById(R.id.btnDisplay);
-//        Button btnSettings = (Button) findViewById(R.id.btnSettings);
         Button btnDelete = (Button) findViewById(R.id.btnDelete);
-        EditText editText = (EditText) findViewById(R.id.caption);
         btnLeft.setOnClickListener(this);
         btnRight.setOnClickListener(this);
         btnFilter.setOnClickListener(filterListener);
-//        btnDisplay.setOnClickListener(displayListener);
-//        btnSettings.setOnClickListener(settingsListener);
         btnDelete.setOnClickListener(deleteListener);
-        editText.setOnKeyListener(editTextListener);
         helper = new Helper();
         Date minDate = new Date(Long.MIN_VALUE);
         Date maxDate = new Date(Long.MAX_VALUE);
@@ -108,41 +102,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-/*    private View.OnClickListener displayListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(MainActivity.this, DisplayActivity.class);
-            i.putExtra("path", currentPhotoPath);
-            startActivity(i);
-        }
-    };
-
-    private View.OnClickListener settingsListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivityForResult(i, SEARCH_ACTIVITY_REQUEST_CODE);
-        }
-    };*/
-
     private View.OnClickListener deleteListener = new View.OnClickListener() {
         public void onClick(View v) {
             helper.remove(currentPhotoPath);
         }
     };
 
-    private View.OnKeyListener editTextListener = new View.OnKeyListener() {
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-           /* System.out.println("Size test: " + photoGallery.size());
-            try {
-                updatePhoto(photoGallery.get(currentPhotoIndex), ((EditText) findViewById(R.id.caption)).getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
-            return true;
-        }
-    };
-
-    private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption) throws ParseException {
+    private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption) throws
+            ParseException {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/bcit.comp7082assignent1/files/Pictures");
 
@@ -178,11 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-/*        try {
-            updatePhoto(photoGallery.get(currentPhotoIndex), ((EditText) findViewById(R.id.caption)).getText().toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
     }
 
     private void updatePhoto(String path, String caption) throws ParseException {
@@ -193,7 +155,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         try {
             if (photoGallery.size() > 0) {
-                updatePhoto(photoGallery.get(currentPhotoIndex), ((EditText) findViewById(R.id.caption)).getText().toString());
+                updatePhoto(photoGallery.get(currentPhotoIndex), ((EditText) findViewById(R.id
+                        .caption)).getText().toString());
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -224,18 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         displayPhoto(currentPhotoPath);
     }
 
-
-    public void goToSettings(View v) {
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivity(i);
-    }
-
-    public void goToDisplay(String x) {
-        Intent i = new Intent(this, DisplayActivity.class);
-        i.putExtra("DISPLAY_TEXT", x);
-        startActivity(i);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -244,9 +195,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("createImageFile", data.getStringExtra("STARTDATE"));
                 Log.d("createImageFile", data.getStringExtra("ENDDATE"));
                 try {
-                    if (!data.getStringExtra("STARTDATE").isEmpty() && !data.getStringExtra("ENDDATE").isEmpty()) {
-                        filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("STARTDATE"));
-                        filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("ENDDATE"));
+                    if (!data.getStringExtra("STARTDATE").isEmpty() && !data.
+                            getStringExtra("ENDDATE").isEmpty()) {
+                        filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data
+                                .getStringExtra("STARTDATE"));
+                        filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data
+                                .getStringExtra("ENDDATE"));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -270,7 +224,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK) {
                 Log.d("createImageFile", "Picture Taken");
                 try {
-                    photoGallery = populateGallery(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE), null);
+                    photoGallery = populateGallery(new Date(Long.MIN_VALUE),
+                            new Date(Long.MAX_VALUE), null);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -292,8 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "bcit.comp7082assignent1.pictures.fileprovider",
-                        photoFile);
+                        "bcit.comp7082assignent1.pictures.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
             }
