@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Date filterStartDate = new Date(Long.MIN_VALUE);
     private Date filterEndDate = new Date(Long.MAX_VALUE);
     private String filterCaption = "";
+    private Helper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +75,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnLeft = (Button) findViewById(R.id.btnLeft);
         Button btnRight = (Button) findViewById(R.id.btnRight);
         Button btnFilter = (Button) findViewById(R.id.btnFilter);
-        Button btnDisplay = (Button) findViewById(R.id.btnDisplay);
-        Button btnSettings = (Button) findViewById(R.id.btnSettings);
+//        Button btnDisplay = (Button) findViewById(R.id.btnDisplay);
+//        Button btnSettings = (Button) findViewById(R.id.btnSettings);
+        Button btnDelete = (Button) findViewById(R.id.btnDelete);
         EditText editText = (EditText) findViewById(R.id.caption);
         btnLeft.setOnClickListener(this);
         btnRight.setOnClickListener(this);
         btnFilter.setOnClickListener(filterListener);
-        btnDisplay.setOnClickListener(displayListener);
-        btnSettings.setOnClickListener(settingsListener);
+//        btnDisplay.setOnClickListener(displayListener);
+//        btnSettings.setOnClickListener(settingsListener);
+        btnDelete.setOnClickListener(deleteListener);
         editText.setOnKeyListener(editTextListener);
-
+        helper = new Helper();
         Date minDate = new Date(Long.MIN_VALUE);
         Date maxDate = new Date(Long.MAX_VALUE);
         try {
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private View.OnClickListener displayListener = new View.OnClickListener() {
+/*    private View.OnClickListener displayListener = new View.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(MainActivity.this, DisplayActivity.class);
             i.putExtra("path", currentPhotoPath);
@@ -116,6 +120,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onClick(View v) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivityForResult(i, SEARCH_ACTIVITY_REQUEST_CODE);
+        }
+    };*/
+
+    private View.OnClickListener deleteListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            helper.remove(currentPhotoPath);
         }
     };
 
@@ -135,25 +145,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption) throws ParseException {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/bcit.comp7082assignent1/files/Pictures");
-        photoGallery = new ArrayList<>();
+
         File[] fList = file.listFiles();
-        if (fList != null) {
-            for (File f : file.listFiles()) {
-                System.out.println("Caption thing: " + caption);
-                if (caption != null && !caption.isEmpty()) {
-                    String fileCaption = f.getPath().split("_")[1];
-                    if (caption.equals(fileCaption)) {
-                        photoGallery.add(f.getPath());
-                    }
-                } else {
-                    String dateString = f.getPath().split("_")[2] + "_" + f.getPath().split("_")[3];
-                    Date date = new SimpleDateFormat("yyyyMMdd_HHmmss").parse(dateString);
-                    if (date.after(minDate) && date.before(maxDate)) {
-                        photoGallery.add(f.getPath());
-                    }
-                }
-            }
-        }
+        photoGallery = helper.find(fList, minDate, maxDate, caption);
         return photoGallery;
     }
 
@@ -192,10 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updatePhoto(String path, String caption) throws ParseException {
-        String[] part = path.split("_");
-        File newFile = new File(part[0] + "_" + caption + "_" + part[2] + "_" + part[3]);
-        File oldFile = new File(path);
-        oldFile.renameTo(newFile);
+        helper.update(path, caption);
         populateGallery(filterStartDate, filterEndDate, filterCaption);
     }
 
@@ -254,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("createImageFile", data.getStringExtra("ENDDATE"));
                 try {
                     if (!data.getStringExtra("STARTDATE").isEmpty() && !data.getStringExtra("ENDDATE").isEmpty()) {
-                        filterStartDate = new SimpleDateFormat("yyyyMMdd_HHmmss").parse(data.getStringExtra("STARTDATE"));
-                        filterEndDate = new SimpleDateFormat("yyyyMMdd_HHmmss").parse(data.getStringExtra("ENDDATE"));
+                        filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("STARTDATE"));
+                        filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("ENDDATE"));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -310,13 +301,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG" + "_caption_" + timeStamp;
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", dir);
+        File image = helper.save(dir);
         currentPhotoPath = image.getAbsolutePath();
         Log.d("createImageFile", currentPhotoPath);
         return image;
     }
-
 }

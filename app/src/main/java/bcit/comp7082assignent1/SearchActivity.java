@@ -20,6 +20,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText caption;
     private Calendar fromCalendar;
     private Calendar toCalendar;
+    private Helper helper;
     private DatePickerDialog.OnDateSetListener fromListener;
     private DatePickerDialog.OnDateSetListener toListener;
 
