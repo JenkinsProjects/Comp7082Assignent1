@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Date filterStartDate = new Date(Long.MIN_VALUE);
     private Date filterEndDate = new Date(Long.MAX_VALUE);
     private String filterCaption = "";
+    private String filterLatitude = "";
+    private String filterLongitude = "";
     private Helper helper;
 
     @Override
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Date minDate = new Date(Long.MIN_VALUE);
         Date maxDate = new Date(Long.MAX_VALUE);
         try {
-            photoGallery = populateGallery(minDate, maxDate, null);
-        } catch (ParseException e) {
+            photoGallery = populateGallery(minDate, maxDate, null, null, null);
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
         Log.d("onCreate, size", Integer.toString(photoGallery.size()));
@@ -108,18 +110,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption) throws
-            ParseException {
+    private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption,
+                                              String latitude, String longitude) throws
+            ParseException, IOException {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/bcit.comp7082assignent1/files/Pictures");
 
         File[] fList = file.listFiles();
-        photoGallery = helper.find(fList, minDate, maxDate, caption);
+        photoGallery = helper.find(fList, minDate, maxDate, caption, latitude, longitude);
         return photoGallery;
     }
 
     private void displayPhoto(String path) {
         ImageView iv = (ImageView) findViewById(R.id.ivMain);
+        System.out.println(path);
         iv.setImageBitmap(BitmapFactory.decodeFile(path));
         displayTimestamp(path);
         displayCaption(path);
@@ -128,9 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void displayTimestamp(String path) {
         TextView ts = (TextView) findViewById(R.id.timestamp);
         if (path != null && !path.isEmpty()) {
-            File image = new File(path);
-            Long lastModified = image.lastModified();
-            ts.setText(lastModified.toString());
+            String dateString = path.split("_")[2] + "_" + path.split("_")[3].substring(0,6);
+            ts.setText(dateString);
         }
     }
 
@@ -147,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
-    private void updatePhoto(String path, String caption) throws ParseException {
+    private void updatePhoto(String path, String caption) throws ParseException, IOException {
         helper.update(path, caption);
-        populateGallery(filterStartDate, filterEndDate, filterCaption);
+        populateGallery(filterStartDate, filterEndDate, filterCaption, null, null);
     }
 
     public void onClick(View v) {
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updatePhoto(photoGallery.get(currentPhotoIndex), ((EditText) findViewById(R.id
                         .caption)).getText().toString());
             }
-        } catch (ParseException e) {
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
         switch (v.getId()) {
@@ -195,21 +198,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("createImageFile", data.getStringExtra("STARTDATE"));
                 Log.d("createImageFile", data.getStringExtra("ENDDATE"));
                 try {
-                    if (!data.getStringExtra("STARTDATE").isEmpty() && !data.
-                            getStringExtra("ENDDATE").isEmpty()) {
-                        filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data
-                                .getStringExtra("STARTDATE"));
-                        filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data
-                                .getStringExtra("ENDDATE"));
+                    if (!data.getStringExtra("STARTDATE").isEmpty() && !data.getStringExtra("ENDDATE").isEmpty()) {
+                        filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("STARTDATE"));
+                        filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("ENDDATE"));
+                    } else{
+                        filterStartDate = new Date(Long.MIN_VALUE);
+                        filterEndDate = new Date(Long.MAX_VALUE);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
                 filterCaption = data.getStringExtra("CAPTION");
-                //System.out.println("dlfhjldhf " + data.getStringExtra("CAPTION"));
+                filterLatitude = data.getStringExtra("LATITUDE");
+                filterLongitude = data.getStringExtra("LONGITUDE");
+
                 try {
-                    photoGallery = populateGallery(filterStartDate, filterEndDate, filterCaption);
-                } catch (ParseException e) {
+                    photoGallery = populateGallery(filterStartDate, filterEndDate, filterCaption,
+                            filterLatitude, filterLongitude);
+                } catch (ParseException | IOException e) {
                     e.printStackTrace();
                 }
                 Log.d("onCreate, size", Integer.toString(photoGallery.size()));
@@ -224,9 +231,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK) {
                 Log.d("createImageFile", "Picture Taken");
                 try {
-                    photoGallery = populateGallery(new Date(Long.MIN_VALUE),
-                            new Date(Long.MAX_VALUE), null);
-                } catch (ParseException e) {
+                    photoGallery = populateGallery(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE), null, null, null);
+                } catch (ParseException | IOException e) {
                     e.printStackTrace();
                 }
                 currentPhotoIndex = 0;
