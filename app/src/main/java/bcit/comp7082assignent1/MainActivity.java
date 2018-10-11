@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Date filterStartDate = new Date(Long.MIN_VALUE);
     private Date filterEndDate = new Date(Long.MAX_VALUE);
     private String filterCaption = "";
-    private String filterLatitude = "";
-    private String filterLongitude = "";
+    private Float filterLatitude = null;
+    private Float filterLongitude = null;
     private Helper helper;
 
     @Override
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     };
 
     private ArrayList<String> populateGallery(Date minDate, Date maxDate, String caption,
-                                              String latitude, String longitude) throws
+                                              Float latitude, Float longitude) throws
             ParseException, IOException {
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/bcit.comp7082assignent1/files/Pictures");
@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void displayPhoto(String path) {
         ImageView iv = (ImageView) findViewById(R.id.ivMain);
-        System.out.println(path);
         iv.setImageBitmap(BitmapFactory.decodeFile(path));
         displayTimestamp(path);
         displayCaption(path);
@@ -132,8 +131,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void displayTimestamp(String path) {
         TextView ts = (TextView) findViewById(R.id.timestamp);
         if (path != null && !path.isEmpty()) {
-            String dateString = path.split("_")[2] + "_" + path.split("_")[3].substring(0,6);
+            String dateString = path.split("_")[2] + "_" + path.split("_")[3].substring(0, 6);
             ts.setText(dateString);
+        } else {
+            ts.setText("Timestamp");
         }
     }
 
@@ -142,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (path != null && !path.isEmpty()) {
             String[] part = path.split("_");
             et.setText(part[1]);
+        } else {
+            et.setText(null);
         }
     }
 
@@ -201,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (!data.getStringExtra("STARTDATE").isEmpty() && !data.getStringExtra("ENDDATE").isEmpty()) {
                         filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("STARTDATE"));
                         filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("ENDDATE"));
-                    } else{
+                    } else {
                         filterStartDate = new Date(Long.MIN_VALUE);
                         filterEndDate = new Date(Long.MAX_VALUE);
                     }
@@ -210,8 +213,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 filterCaption = data.getStringExtra("CAPTION");
-                filterLatitude = data.getStringExtra("LATITUDE");
-                filterLongitude = data.getStringExtra("LONGITUDE");
+
+                if (!data.getStringExtra("LATITUDE").isEmpty() && !data.getStringExtra("LONGITUDE").isEmpty()) {
+                    filterLatitude = Float.parseFloat(data.getStringExtra("LATITUDE"));
+                    filterLongitude = Float.parseFloat(data.getStringExtra("LONGITUDE"));
+                } else{
+                    filterLatitude = null;
+                    filterLongitude = null;
+                }
 
                 try {
                     photoGallery = populateGallery(filterStartDate, filterEndDate, filterCaption,
@@ -223,6 +232,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentPhotoIndex = 0;
                 if (photoGallery.size() > 0) {
                     currentPhotoPath = photoGallery.get(currentPhotoIndex);
+                } else {
+                    currentPhotoPath = null;
                 }
                 displayPhoto(currentPhotoPath);
             }

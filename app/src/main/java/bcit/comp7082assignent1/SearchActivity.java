@@ -96,8 +96,8 @@ public class SearchActivity extends AppCompatActivity implements LocationListene
     public void onLocationChanged(Location location) {
         TextView tvLat = (TextView) findViewById(R.id.tvLat);
         TextView tvLng = (TextView) findViewById(R.id.tvLng);
-        tvLat.setText(String.valueOf((int)location.getLatitude()));
-        tvLng.setText(String.valueOf((int)location.getLongitude()));
+        tvLat.setText(String.valueOf(location.getLatitude()));
+        tvLng.setText(String.valueOf(location.getLongitude()));
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

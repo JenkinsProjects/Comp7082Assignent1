@@ -100,57 +100,64 @@
         android:id="@+id/lblLat"
         android:layout_width="85dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tvLat"
+        android:layout_alignStart="@+id/search_captionLabel"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="-21dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Latitude:"
-        android:layout_marginBottom="43dp"
-        android:layout_above="@+id/tvLat"
-        android:layout_alignStart="@+id/search_captionLabel" />
-
-    <TextView
-        android:id="@+id/tvLat"
-        android:layout_width="150dp"
-        android:layout_height="41dp"
-        android:layout_alignBottom="@+id/lblLng"
-        android:layout_alignStart="@+id/tvLng"
-        android:text="Unknown"
-        android:layout_toStartOf="@+id/search_cancel" />
-
-    <TextView
-        android:id="@+id/lblLng"
-        android:layout_width="92dp"
-        android:layout_height="30dp"
-        android:text="Longitude"
-        android:layout_marginBottom="58dp"
-        android:layout_above="@+id/search_search"
-        android:layout_alignStart="@+id/lblLat" />
+        android:text="Latitude:" />
 
     <TextView
         android:id="@+id/tvLng"
-        android:layout_width="131dp"
-        android:layout_height="32dp"
-        android:text="Unknown"
-        android:layout_alignBaseline="@+id/lblLat"
-        android:layout_alignBottom="@+id/lblLat"
+        android:layout_width="94dp"
+        android:layout_height="44dp"
         android:layout_alignStart="@+id/search_caption"
-        android:layout_toStartOf="@+id/search_cancel" />
+        android:layout_alignBottom="@+id/lblLng"
+        android:layout_marginStart="-23dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="-6dp"
+        android:layout_toStartOf="@+id/search_cancel"
+        android:text="Unknown" />
+
+    <TextView
+        android:id="@+id/lblLng"
+        android:layout_width="87dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/search_search"
+        android:layout_alignStart="@+id/lblLat"
+        android:layout_marginBottom="69dp"
+        android:text="Longitude" />
+
+    <TextView
+        android:id="@+id/tvLat"
+        android:layout_width="99dp"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@+id/lblLng"
+        android:layout_marginEnd="-1dp"
+
+        android:layout_marginBottom="48dp"
+        android:layout_toStartOf="@+id/search_cancel"
+        android:text="Unknown" />
 
     <EditText
         android:id="@+id/search_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
-        android:layout_alignTop="@+id/tvLng"
-        android:layout_toEndOf="@+id/tvLng" />
+        android:inputType="numberSigned"
+        android:layout_alignTop="@+id/tvLat"
+        android:layout_toEndOf="@+id/tvLat"
+        />
 
     <EditText
         android:id="@+id/search_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
-        android:layout_alignTop="@+id/tvLat"
-        android:layout_toEndOf="@+id/tvLat" />
+        android:inputType="numberSigned"
+        android:layout_alignTop="@+id/tvLng"
+        android:layout_toEndOf="@+id/tvLng"
+/>
 </RelativeLayout>
 
