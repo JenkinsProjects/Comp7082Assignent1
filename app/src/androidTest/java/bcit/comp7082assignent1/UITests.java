@@ -34,10 +34,10 @@ public class UITests {
     public String expectedDate1;
     public String expectedDate2;
     public String expectedDate3;
-    public Float latitude1;
-    public Float longitude1;
-    public Float latitude2;
-    public Float longitude2;
+    public Integer latitude1;
+    public Integer longitude1;
+    public Integer latitude2;
+    public Integer longitude2;
 
     @Before
     public void beforeTest() {
@@ -51,10 +51,10 @@ public class UITests {
         expectedDate1 = "20181010_190905";
         expectedDate2 = "20181010_190927";
         expectedDate3 = "20181010_190917";
-        latitude1 = 49f;
-        longitude1 = -123f;
-        latitude1 = 1f;
-        longitude1 = 1f;
+        latitude1 = 49;
+        longitude1 = -123;
+        latitude2 = 1;
+        longitude2 = 1;
     }
 
     @Test
@@ -80,17 +80,17 @@ public class UITests {
         onView(withId(R.id.timestamp)).check(matches(withText(containsString(expectedDate2))));
         for (int i = 0; i <= 3; i++) {
             onView(withId(R.id.btnRight)).perform(click());
-            onView(withId(R.id.caption)).check(matches(withText(containsString(expectedDate2))));
+            onView(withId(R.id.timestamp)).check(matches(withText(containsString(expectedDate2))));
             onView(withId(R.id.btnLeft)).perform(click());
-            onView(withId(R.id.caption)).check(matches(withText(containsString(expectedDate2))));
+            onView(withId(R.id.timestamp)).check(matches(withText(containsString(expectedDate2))));
         }
     }
 
     @Test
     public void TestLocationFilter() {
         onView(withId(R.id.btnFilter)).perform(click());
-        onView(withId(R.id.search_latitude)).perform(typeText(latitude1), closeSoftKeyboard());
-        onView(withId(R.id.search_longitude)).perform(typeText(longitude1), closeSoftKeyboard());
+        onView(withId(R.id.search_latitude)).perform(typeText(latitude1.toString()), closeSoftKeyboard());
+        onView(withId(R.id.search_longitude)).perform(typeText(longitude1.toString()), closeSoftKeyboard());
         onView(withId(R.id.search_search)).perform(click());
         onView(withId(R.id.caption)).check(matches(withText(containsString("caption2"))));
         onView(withId(R.id.btnRight)).perform(click());
@@ -98,9 +98,10 @@ public class UITests {
         onView(withId(R.id.btnRight)).perform(click());
         onView(withId(R.id.caption)).check(matches(withText(containsString("caption1"))));
         onView(withId(R.id.btnFilter)).perform(click());
-        onView(withId(R.id.search_latitude)).perform(typeText(latitude2), closeSoftKeyboard());
-        onView(withId(R.id.search_longitude)).perform(typeText(longitude2), closeSoftKeyboard());
-        onView(withId(R.id.caption)).check(matches(withText(containsString(""))));
+        onView(withId(R.id.search_latitude)).perform(typeText(latitude2.toString()), closeSoftKeyboard());
+        onView(withId(R.id.search_longitude)).perform(typeText(longitude2.toString()), closeSoftKeyboard());
+        onView(withId(R.id.search_search)).perform(click());
+        onView(withId(R.id.timestamp)).check(matches(withText(containsString("Timestamp"))));
     }
 
     @After
