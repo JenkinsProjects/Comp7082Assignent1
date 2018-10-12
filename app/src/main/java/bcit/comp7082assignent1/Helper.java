@@ -44,7 +44,6 @@ public class Helper {
         ArrayList<String> photoGallery = new ArrayList<>();
         if (fList != null) {
             for (File f : fList) {
-                System.out.println("Stuff " + caption + " " +  latitude + " " + longitude + " " + maxDate + " " + minDate);
                 if (caption != null && !caption.isEmpty()) {
                     String fileCaption = f.getPath().split("_")[1];
                     if (caption.equals(fileCaption)) {
@@ -64,7 +63,6 @@ public class Helper {
                         }
                     } else {
                         String dateString = f.getPath().split("_")[2] + "_" + f.getPath().split("_")[3].substring(0, 6);
-                        System.out.println("date " + dateString);
                         Date date = new SimpleDateFormat("yyyyMMdd_HHmmss").parse(dateString);
                         if (date.after(minDate) && date.before(maxDate)) {
                             photoGallery.add(f.getPath());
