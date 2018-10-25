@@ -1,61 +1,26 @@
 package bcit.comp7082assignent1;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-
-import java.io.File;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 0;
@@ -130,21 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void displayTimestamp(String path) {
         TextView ts = (TextView) findViewById(R.id.timestamp);
+        ts.setText("Timestamp");
         if (path != null && !path.isEmpty()) {
             String dateString = path.split("_")[2] + "_" + path.split("_")[3].substring(0, 6);
             ts.setText(dateString);
-        } else {
-            ts.setText("Timestamp");
         }
     }
 
     private void displayCaption(String path) {
         EditText et = (EditText) findViewById(R.id.caption);
+        et.setText(null);
         if (path != null && !path.isEmpty()) {
             String[] part = path.split("_");
             et.setText(part[1]);
-        } else {
-            et.setText(null);
         }
     }
 
@@ -196,30 +159,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
                 Log.d("createImageFile", data.getStringExtra("STARTDATE"));
                 Log.d("createImageFile", data.getStringExtra("ENDDATE"));
                 try {
+                    filterStartDate = new Date(Long.MIN_VALUE);
+                    filterEndDate = new Date(Long.MAX_VALUE);
                     if (!data.getStringExtra("STARTDATE").isEmpty() && !data.getStringExtra("ENDDATE").isEmpty()) {
                         filterStartDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("STARTDATE"));
                         filterEndDate = new SimpleDateFormat("yyyyMMddHHmmss").parse(data.getStringExtra("ENDDATE"));
-                    } else {
-                        filterStartDate = new Date(Long.MIN_VALUE);
-                        filterEndDate = new Date(Long.MAX_VALUE);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
                 filterCaption = data.getStringExtra("CAPTION");
-
+                filterLatitude = null;
+                filterLongitude = null;
                 if (!data.getStringExtra("LATITUDE").isEmpty() && !data.getStringExtra("LONGITUDE").isEmpty()) {
                     filterLatitude = Float.parseFloat(data.getStringExtra("LATITUDE"));
                     filterLongitude = Float.parseFloat(data.getStringExtra("LONGITUDE"));
-                } else{
-                    filterLatitude = null;
-                    filterLongitude = null;
                 }
 
                 try {
@@ -230,16 +190,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 Log.d("onCreate, size", Integer.toString(photoGallery.size()));
                 currentPhotoIndex = 0;
+
+                currentPhotoPath = null;
                 if (photoGallery.size() > 0) {
                     currentPhotoPath = photoGallery.get(currentPhotoIndex);
-                } else {
-                    currentPhotoPath = null;
                 }
                 displayPhoto(currentPhotoPath);
             }
-        }
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST_CODE) {
                 Log.d("createImageFile", "Picture Taken");
                 try {
                     photoGallery = populateGallery(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE), null, null, null);
@@ -256,17 +214,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void takePicture(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
+            File photoFile;
             try {
                 photoFile = createImageFile();
-            } catch (IOException ex) {
-                Log.d("FileCreation", "Failed");
-            }
-            if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "bcit.comp7082assignent1.pictures.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            } catch (IOException ex) {
+                Log.d("FileCreation", "Failed");
             }
         }
     }

@@ -1,0 +1,57 @@
+Method metrics
+bcit.comp7082assignent1.ExampleInstrumentedTest.useAppContext()	1.0	1.0	1.0
+bcit.comp7082assignent1.ExampleUnitTest.addition_isCorrect()	1.0	1.0	1.0
+bcit.comp7082assignent1.ExampleUnitTest.dataStorage()	1.0	1.0	1.0
+bcit.comp7082assignent1.Helper.coordinatesToFloat(String,String)	1.0	2.0	3.0
+bcit.comp7082assignent1.Helper.find(File[],Date,Date,String,Float,Float)	1.0	10.0	14.0
+bcit.comp7082assignent1.Helper.remove(String)	1.0	1.0	1.0
+bcit.comp7082assignent1.Helper.save(File)	1.0	1.0	1.0
+bcit.comp7082assignent1.Helper.update(String,String)	1.0	1.0	1.0
+bcit.comp7082assignent1.MainActivity.createImageFile()	1.0	1.0	1.0
+bcit.comp7082assignent1.MainActivity.displayCaption(String)	1.0	3.0	3.0
+bcit.comp7082assignent1.MainActivity.displayPhoto(String)	1.0	1.0	1.0
+bcit.comp7082assignent1.MainActivity.displayTimestamp(String)	1.0	3.0	3.0
+bcit.comp7082assignent1.MainActivity.onActivityResult(int,int,Intent)	1.0	13.0	13.0
+bcit.comp7082assignent1.MainActivity.onClick(View)	2.0	6.0	9.0
+bcit.comp7082assignent1.MainActivity.onCreate(Bundle)	1.0	3.0	3.0
+bcit.comp7082assignent1.MainActivity.onResume()	1.0	1.0	1.0
+bcit.comp7082assignent1.MainActivity.populateGallery(Date,Date,String,Float,Float)	1.0	1.0	1.0
+bcit.comp7082assignent1.MainActivity.takePicture(View)	1.0	4.0	4.0
+bcit.comp7082assignent1.MainActivity.updatePhoto(String,String)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.cancel(View)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.onCreate(Bundle)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.onLocationChanged(Location)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.onPause()	1.0	2.0	2.0
+bcit.comp7082assignent1.SearchActivity.onProviderDisabled(String)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.onProviderEnabled(String)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.onRequestPermissionsResult(int,String[],int[])	1.0	3.0	4.0
+bcit.comp7082assignent1.SearchActivity.onResume()	1.0	2.0	2.0
+bcit.comp7082assignent1.SearchActivity.onStatusChanged(String,int,Bundle)	1.0	1.0	1.0
+bcit.comp7082assignent1.SearchActivity.search(View)	1.0	1.0	1.0
+bcit.comp7082assignent1.UITests.afterTest()	1.0	1.0	1.0
+bcit.comp7082assignent1.UITests.beforeTest()	1.0	1.0	1.0
+bcit.comp7082assignent1.UITests.TestCaptionFilter()	1.0	2.0	2.0
+bcit.comp7082assignent1.UITests.TestDateFilter()	1.0	2.0	2.0
+bcit.comp7082assignent1.UITests.TestLocationFilter()	1.0	1.0	1.0
+null.onClick(View)	1.0	1.0	1.0
+Total	36.0	77.0	86.0
+Average	1.0285714285714285	2.2	2.4571428571428573
+
+Class metrics
+bcit.comp7082assignent1.ExampleInstrumentedTest	1.0	1.0
+bcit.comp7082assignent1.ExampleUnitTest	1.0	2.0
+bcit.comp7082assignent1.Helper	2.6	13.0
+bcit.comp7082assignent1.MainActivity	2.4615384615384617	32.0
+bcit.comp7082assignent1.SearchActivity	1.4	14.0
+bcit.comp7082assignent1.UITests	1.4	7.0
+Total		69.0
+Average	1.9166666666666667	11.5
+
+Package metrics
+bcit.comp7082assignent1	2.4166666666666665	87.0
+
+Module metrics
+app	2.4166666666666665	87.0
+
+Project metrics
+project	2.4166666666666665	87.0
