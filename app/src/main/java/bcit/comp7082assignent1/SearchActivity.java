@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,9 +40,9 @@ public class SearchActivity extends AppCompatActivity implements LocationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        fromDate = (EditText) findViewById(R.id.search_fromDate);
-        toDate = (EditText) findViewById(R.id.search_toDate);
-        caption = (EditText) findViewById(R.id.search_caption);
+        fromDate = findViewById(R.id.search_fromDate);
+        toDate = findViewById(R.id.search_toDate);
+        caption = findViewById(R.id.search_caption);
 
         latitude = (EditText) findViewById(R.id.search_latitude);
         longitude = (EditText) findViewById(R.id.search_longitude);
@@ -85,8 +86,8 @@ public class SearchActivity extends AppCompatActivity implements LocationListene
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView tvLat = (TextView) findViewById(R.id.tvLat);
-        TextView tvLng = (TextView) findViewById(R.id.tvLng);
+        TextView tvLat = findViewById(R.id.tvLat);
+        TextView tvLng = findViewById(R.id.tvLng);
         tvLat.setText(String.valueOf(location.getLatitude()));
         tvLng.setText(String.valueOf(location.getLongitude()));
     }
@@ -104,7 +105,7 @@ public class SearchActivity extends AppCompatActivity implements LocationListene
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         }

@@ -1,9 +1,6 @@
 package bcit.comp7082assignent1;
 
 import android.media.ExifInterface;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.EditText;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Paul on 2018-09-27.
@@ -23,9 +19,8 @@ public class Helper {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         String imageFileName = "JPEG" + "_caption_" + timeStamp;
-        File image = File.createTempFile(imageFileName, ".jpg", dir);
 
-        return image;
+        return File.createTempFile(imageFileName, ".jpg", dir);
     }
 
     public void remove(String path) {

@@ -31,18 +31,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Date filterStartDate = new Date(Long.MIN_VALUE);
     private Date filterEndDate = new Date(Long.MAX_VALUE);
     private String filterCaption = "";
-    private Float filterLatitude = null;
-    private Float filterLongitude = null;
     private Helper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btnLeft = (Button) findViewById(R.id.btnLeft);
-        Button btnRight = (Button) findViewById(R.id.btnRight);
-        Button btnFilter = (Button) findViewById(R.id.btnFilter);
-        Button btnDelete = (Button) findViewById(R.id.btnDelete);
+        Button btnLeft = findViewById(R.id.btnLeft);
+        Button btnRight = findViewById(R.id.btnRight);
+        Button btnFilter = findViewById(R.id.btnFilter);
+        Button btnDelete = findViewById(R.id.btnDelete);
         btnLeft.setOnClickListener(this);
         btnRight.setOnClickListener(this);
         btnFilter.setOnClickListener(filterListener);
@@ -87,14 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayPhoto(String path) {
-        ImageView iv = (ImageView) findViewById(R.id.ivMain);
+        ImageView iv = findViewById(R.id.ivMain);
         iv.setImageBitmap(BitmapFactory.decodeFile(path));
         displayTimestamp(path);
         displayCaption(path);
     }
 
     private void displayTimestamp(String path) {
-        TextView ts = (TextView) findViewById(R.id.timestamp);
+        TextView ts = findViewById(R.id.timestamp);
         ts.setText("Timestamp");
         if (path != null && !path.isEmpty()) {
             String dateString = path.split("_")[2] + "_" + path.split("_")[3].substring(0, 6);
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayCaption(String path) {
-        EditText et = (EditText) findViewById(R.id.caption);
+        EditText et = findViewById(R.id.caption);
         et.setText(null);
         if (path != null && !path.isEmpty()) {
             String[] part = path.split("_");
@@ -175,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 filterCaption = data.getStringExtra("CAPTION");
-                filterLatitude = null;
-                filterLongitude = null;
+                Float filterLatitude = null;
+                Float filterLongitude = null;
                 if (!data.getStringExtra("LATITUDE").isEmpty() && !data.getStringExtra("LONGITUDE").isEmpty()) {
                     filterLatitude = Float.parseFloat(data.getStringExtra("LATITUDE"));
                     filterLongitude = Float.parseFloat(data.getStringExtra("LONGITUDE"));
