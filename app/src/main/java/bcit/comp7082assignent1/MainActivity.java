@@ -25,13 +25,13 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 0;
     static final int CAMERA_REQUEST_CODE = 1;
-    private String currentPhotoPath = null;
+    String currentPhotoPath = null;
     private int currentPhotoIndex = 0;
     private ArrayList<String> photoGallery;
     private Date filterStartDate = new Date(Long.MIN_VALUE);
     private Date filterEndDate = new Date(Long.MAX_VALUE);
     private String filterCaption = "";
-    private Helper helper;
+    Helper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
-        Log.d("onCreate, size", Integer.toString(photoGallery.size()));
+        if(Log.isLoggable("onCreate, size", photoGallery.size())){
+            Log.d("onCreate, size", Integer.toString(photoGallery.size()));
+        }
+
         if (photoGallery.size() > 0) {
             currentPhotoPath = photoGallery.get(currentPhotoIndex);
         }
